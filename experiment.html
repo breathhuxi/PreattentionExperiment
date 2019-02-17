@@ -64,10 +64,9 @@ body {
         <span class="formLb">Trial:</span>
         <select class="select" id="trialSel" onchange="onchangeTrial()"></select>
 
-        <button onclick="startExperiment(event)" onkeyup="ignore(event)">GO</button>
-
+        <button id="btn" onclick="startExperiment(event)" onkeyup="ignore(event)">GO</button>
+        <button onclick="downloadTrial(event)">download</button>
         </form>
-
         <div id="instructions"></div>
     </div>
 
@@ -75,5 +74,12 @@ body {
         
       </div>
   </body>
-
+<script>
+    document.onkeydown = function(event) {
+        if (event.keyCode === 0 || event.keyCode === 32) {
+            event.preventDefault();
+            document.getElementById("btn").onclick=function () { return false}
+        }
+    }
+</script>
 </html>
