@@ -198,7 +198,6 @@ var displayShapes = function(OC, VV) { //shapes are circles here
                 .attr("transform", sdv.translate);
         }
     }
-
     ctx.state = "SHAPES_DISPLAYED";
     ctx.startTime = Date.now();
 }
@@ -241,6 +240,9 @@ var keyListener = function(event) {
 
     if (event.code == "Space" && ctx.state === "SHAPES_DISPLAYED") {
         displayCovers(ctx.trials[ctx.cpt]["OC"]);
+        var stopTime=Date.now();
+        ctx.visualSearchTime=stopTime-ctx.startTime;
+        logTrial();
     }
 }
 
@@ -252,7 +254,7 @@ var nextTrial = function(correct) {
         ctx.errorCount = 0;
     }
     if (correct === true) {
-        //logTrial();    
+        //logTrial();
         ctx.cpt++;
         ctx.errorCount = 0;
         console.log("CORRECT CLICK");
@@ -295,9 +297,6 @@ var downloadTrial=function (e) {
 };
 var startExperiment = function(event) {
     event.preventDefault();
-
-    console.log(event);
-
     for (var i = 0; i < ctx.trials.length; i++) {
         if (ctx.trials[i][ctx.participantIndex] === ctx.participant) {
             if (parseInt(ctx.trials[i][ctx.blockIndex]) == ctx.startBlock) {
@@ -307,10 +306,9 @@ var startExperiment = function(event) {
             }
         }
     }
-
     console.log("start experiment at " + ctx.cpt);
     nextTrial("init");
-    logTrial();
+
 
 
 }
