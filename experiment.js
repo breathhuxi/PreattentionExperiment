@@ -275,7 +275,7 @@ var nextTrial = function(correct) {
     //displayShapes(ctx.trials[ctx.cpt]["OC"], ctx.trials[ctx.cpt]["VV"]);//give control to itself
 };
 
-var downloadTrial=function (e) {
+var downloadLog=function (e) {
     function _getDownloadUrl (text) {
         const BOM = '\uFEFF';
         if (window.Blob && window.URL && window.URL.createObjectURL) {
