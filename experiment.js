@@ -20,6 +20,7 @@ var ctx = {
     errorCount: 0,
 
     state: "",
+    loggedTrials:[],
 };
 
 var sdv = { // scene display variables
@@ -32,7 +33,7 @@ var sdv = { // scene display variables
 };
 
 var randomId = 0; // for the unique shape of each trial
-
+var list=new Array(0);
 
 
 // functions called for each trial:
@@ -41,21 +42,21 @@ var showInstructions = function() {
     d3.select("#shapes").remove();
 
     d3.select("#instructions")
-    .append("div")
-    .attr("id", "textInstructions")
-    .append("p")
-    .attr("id", "title")
-    .html("<b>Hello! This is an experiment to test how sensitive human eyes are to different visual clues.</b>")
-    .append("p")
-    .attr("id", "step1")
-    .html("1. When you are ready, press the <b>Enter</b> key to go to the next trial. <i>The Timer starts.</i>")
-    .append("p")
-    .attr("id", "step2")
-    .html("2. When you spot the unique shape different from all other shapes, press the <b>Spacebar</b> as fast as possible. <i>The Timer stops.</i>")
-    .append("p")
-    .attr("id", "step3")
-    .html("3. Squares will appear to cover all the shapes in the trial, click on the square in the same position as the unique shape.")
-    .attr("transform", sdv.translate);
+        .append("div")
+        .attr("id", "textInstructions")
+        .append("p")
+        .attr("id", "title")
+        .html("<b>Hello! This is an experiment to test how sensitive human eyes are to different visual clues.</b>")
+        .append("p")
+        .attr("id", "step1")
+        .html("1. When you are ready, press the <b>Enter</b> key to go to the next trial. <i>The Timer starts.</i>")
+        .append("p")
+        .attr("id", "step2")
+        .html("2. When you spot the unique shape different from all other shapes, press the <b>Spacebar</b> as fast as possible. <i>The Timer stops.</i>")
+        .append("p")
+        .attr("id", "step3")
+        .html("3. Squares will appear to cover all the shapes in the trial, click on the square in the same position as the unique shape.")
+        .attr("transform", sdv.translate);
 
     ctx.state = "INSTRUCTIONS_DISPLAYED";
 }
@@ -64,35 +65,35 @@ var displayCovers = function(OC) {
     for(var i = 0; i < sdv.numShapes; i++){
         for(var j = 0; j < sdv.numShapes; j++){
 
-        if(j*sdv.numShapes+i === randomId){
-            d3.select("#shapes")
-            .append("rect")
-            .attr("x", i*sdv.defaultSize*2+sdv.margin*i-sdv.defaultSize)
-            .attr("y", j*sdv.defaultSize*2+sdv.margin*j-sdv.defaultSize)
-            .attr("height", 2*sdv.defaultSize)
-            .attr("width", 2*sdv.defaultSize)
-            .attr("stroke", sdv.defaultStrokeColor)
-            .attr("stroke-width", 3)
-            .attr("fill", sdv.defaultFillColor)
-            .attr("transform", sdv.translate)
-            .on("click", function(event){
-                nextTrial(true);
-            });
-        }else{
-            d3.select("#shapes")
-            .append("rect")
-            .attr("x", i*sdv.defaultSize*2+sdv.margin*i-sdv.defaultSize)
-            .attr("y", j*sdv.defaultSize*2+sdv.margin*j-sdv.defaultSize)
-            .attr("height", 2*sdv.defaultSize)
-            .attr("width", 2*sdv.defaultSize)
-            .attr("stroke", sdv.defaultStrokeColor)
-            .attr("stroke-width", 3)
-            .attr("fill", sdv.defaultFillColor)
-            .attr("transform", sdv.translate)
-            .on("click", function(event){
-                nextTrial(false);
-            });
-        }
+            if(j*sdv.numShapes+i === randomId){
+                d3.select("#shapes")
+                    .append("rect")
+                    .attr("x", i*sdv.defaultSize*2+sdv.margin*i-sdv.defaultSize)
+                    .attr("y", j*sdv.defaultSize*2+sdv.margin*j-sdv.defaultSize)
+                    .attr("height", 2*sdv.defaultSize)
+                    .attr("width", 2*sdv.defaultSize)
+                    .attr("stroke", sdv.defaultStrokeColor)
+                    .attr("stroke-width", 3)
+                    .attr("fill", sdv.defaultFillColor)
+                    .attr("transform", sdv.translate)
+                    .on("click", function(event){
+                        nextTrial(true);
+                    });
+            }else{
+                d3.select("#shapes")
+                    .append("rect")
+                    .attr("x", i*sdv.defaultSize*2+sdv.margin*i-sdv.defaultSize)
+                    .attr("y", j*sdv.defaultSize*2+sdv.margin*j-sdv.defaultSize)
+                    .attr("height", 2*sdv.defaultSize)
+                    .attr("width", 2*sdv.defaultSize)
+                    .attr("stroke", sdv.defaultStrokeColor)
+                    .attr("stroke-width", 3)
+                    .attr("fill", sdv.defaultFillColor)
+                    .attr("transform", sdv.translate)
+                    .on("click", function(event){
+                        nextTrial(false);
+                    });
+            }
 
         }
     }
@@ -103,14 +104,14 @@ var displayCovers = function(OC) {
  * @param {Array} An array containing the items.
  */
 function shuffle(a) {
-  var j, x, i;
-  for (i = a.length - 1; i > 0; i--) {
-      j = Math.floor(Math.random() * (i + 1));
-      x = a[i];
-      a[i] = a[j];
-      a[j] = x;
-  }
-  return a;
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
 }
 
 function generateShapesAttributes(targetShapeStroke, targetShapeFill, restShapeStroke, restShapeFill) {
@@ -125,9 +126,9 @@ function generateShapesAttributes(targetShapeStroke, targetShapeFill, restShapeS
         shapes.push({stroke: restShapeStroke, fill: restShapeFill});
     }
     for (i = 0; i < sdv.numShapes * sdv.numShapes - 7; i++){
-      var sc = Math.random() > 0.5 ? targetShapeStroke : restShapeStroke;
-      var fc = (sc == targetShapeStroke) ? restShapeFill : (Math.random() > 0.5 ? targetShapeFill : restShapeFill);
-      shapes.push({ stroke: sc, fill: fc });
+        var sc = Math.random() > 0.5 ? targetShapeStroke : restShapeStroke;
+        var fc = (sc == targetShapeStroke) ? restShapeFill : (Math.random() > 0.5 ? targetShapeFill : restShapeFill);
+        shapes.push({ stroke: sc, fill: fc });
     }
     shapes = shuffle(shapes);
     shapes.splice(randomId, 0, { stroke: targetShapeStroke, fill: targetShapeFill }); // 1 target shape
@@ -140,8 +141,8 @@ var displayShapes = function(OC, VV) { //shapes are circles here
     d3.select("#shapes").remove();
 
     d3.select("#mainScene")
-    .append("g")
-    .attr("id", "shapes");
+        .append("g")
+        .attr("id", "shapes");
 
     var shape = "circle";
 
@@ -159,7 +160,7 @@ var displayShapes = function(OC, VV) { //shapes are circles here
     console.log("number of shapes: "+sdv.numShapes);
     randomId = Math.floor((sdv.numShapes*sdv.numShapes-1)*Math.random());
     console.log("randomId: "+randomId);
-    
+
     // Randomly decide target stroke color & target fill color
     sdv.targetStrokeColor = Math.random() > 0.5 ? "grey" : "white";
     sdv.otherStrokeColor = (sdv.targetStrokeColor === "grey") ? "white" : "grey";
@@ -187,14 +188,14 @@ var displayShapes = function(OC, VV) { //shapes are circles here
     for(var i = 0; i < sdv.numShapes; i++){
         for(var j = 0; j < sdv.numShapes; j++){
             d3.select("#shapes")
-            .append(shape)
-            .attr("cx", i*sdv.defaultSize*2+sdv.margin*i)
-            .attr("cy", j*sdv.defaultSize*2+sdv.margin*j)
-            .attr("r", sdv.defaultSize)
-            .attr("stroke", shapes[j*sdv.numShapes+i].stroke)
-            .attr("stroke-width", 3)
-            .attr("fill", shapes[j*sdv.numShapes+i].fill)
-            .attr("transform", sdv.translate);
+                .append(shape)
+                .attr("cx", i*sdv.defaultSize*2+sdv.margin*i)
+                .attr("cy", j*sdv.defaultSize*2+sdv.margin*j)
+                .attr("r", sdv.defaultSize)
+                .attr("stroke", shapes[j*sdv.numShapes+i].stroke)
+                .attr("stroke-width", 3)
+                .attr("fill", shapes[j*sdv.numShapes+i].fill)
+                .attr("transform", sdv.translate);
         }
     }
 
@@ -222,9 +223,6 @@ var logTrial = function() {
     console.log(logLine);
 }
 
-var downloadTrial = function() {
-
-}
 
 
 
@@ -273,8 +271,28 @@ var nextTrial = function(correct) {
         showInstructions();
     }
     //displayShapes(ctx.trials[ctx.cpt]["OC"], ctx.trials[ctx.cpt]["VV"]);//give control to itself
-}
+};
 
+var downloadTrial=function (e) {
+    function _getDownloadUrl (text) {
+        const BOM = '\uFEFF';
+        if (window.Blob && window.URL && window.URL.createObjectURL) {
+            const csvData = new Blob([BOM + text], { type: 'text/csv' });
+            return URL.createObjectURL(csvData);
+        } else {
+            return 'data:attachment/csv;charset=utf-8,' + BOM + encodeURIComponent(text);
+        }
+    }
+    e.preventDefault();
+    console.log(d3.csvFormat(ctx.loggedTrials));
+    text=d3.csvFormat(ctx.loggedTrials);
+    const link = document.createElement('a');
+    link.download = 'Trial.csv';
+    link.href = _getDownloadUrl (text);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
 var startExperiment = function(event) {
     event.preventDefault();
 
@@ -292,6 +310,9 @@ var startExperiment = function(event) {
 
     console.log("start experiment at " + ctx.cpt);
     nextTrial("init");
+    logTrial();
+
+
 }
 
 var createScene = function() {
