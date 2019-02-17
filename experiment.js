@@ -33,7 +33,7 @@ var sdv = { // scene display variables
 };
 
 var randomId = 0; // for the unique shape of each trial
-var list=new Array(0);
+
 
 
 // functions called for each trial:
@@ -289,12 +289,13 @@ var downloadTrial=function (e) {
     console.log(d3.csvFormat(ctx.loggedTrials));
     text=d3.csvFormat(ctx.loggedTrials);
     const link = document.createElement('a');
-    link.download = 'Trial.csv';
+    link.download = 'logs_' + Date.now() + ".csv";
     link.href = _getDownloadUrl (text);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 };
+
 var startExperiment = function(event) {
     event.preventDefault();
     for (var i = 0; i < ctx.trials.length; i++) {
@@ -308,9 +309,6 @@ var startExperiment = function(event) {
     }
     console.log("start experiment at " + ctx.cpt);
     nextTrial("init");
-
-
-
 }
 
 var createScene = function() {
