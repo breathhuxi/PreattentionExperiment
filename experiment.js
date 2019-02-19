@@ -173,12 +173,18 @@ var displayShapes = function(OC, VV) { //shapes are circles here
 
     shapes = [];
     console.log("VV: "+VV);
-    if (VV === "Stroke"){ // 1 target shape: target stroke + other fill
-        generateShapesAttributes(sdv.targetStrokeColor, sdv.otherFillColor, sdv.otherStrokeColor, sdv.targetFillColor);
+    if (VV === "Stroke"){ // 1 target shape: target stroke + same fill
+        for (i = 0; i < sdv.numShapes * sdv.numShapes - 1; i++){
+            shapes.push({ stroke: sdv.otherStrokeColor, fill: sdv.targetFillColor });
+        }
+        shapes.splice(randomId, 0, { stroke: sdv.targetStrokeColor, fill: sdv.targetFillColor }); // 1 target shape
     }
 
-    if (VV === "Fill"){ // 1 target shape: other stroke + target fill
-        generateShapesAttributes(sdv.otherStrokeColor, sdv.targetFillColor, sdv.targetStrokeColor, sdv.otherFillColor);
+    if (VV === "Fill"){ // 1 target shape: same stroke + target fill
+        for (i = 0; i < sdv.numShapes * sdv.numShapes - 1; i++){
+            shapes.push({ stroke: sdv.targetStrokeColor, fill: sdv.otherFillColor });
+        }
+        shapes.splice(randomId, 0, { stroke: sdv.targetStrokeColor, fill: sdv.targetFillColor }); // 1 target shape
     }
 
     if (VV === "StrokeFill"){ // 1 target shape: target stroke + target fill
